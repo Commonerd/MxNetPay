@@ -1,844 +1,1290 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-site-verification"
+      content="U-GWwZOKUY-FqRJYQu4ealLEaLnFK4WTKgDI7SCbS3E"
+    />
     <title>MxNetPay - Calculadora de Salario Neto México</title>
-    <meta name="description" content="Calculadora de salario neto para empleados y autónomos en México. Calcula tu sueldo después de impuestos (ISR, IMSS) de forma sencilla.">
-    <meta name="keywords" content="salario neto México, calculadora sueldo México, ISR México, IMSS, impuestos México, autónomo México, empleado México, salario después de impuestos, sueldo real, calculadora impuestos">
-    <meta name="author" content="MxNetPay">
+    <meta
+      name="description"
+      content="Calculadora de salario neto para empleados y autónomos en México. Calcula tu sueldo después de impuestos (ISR, IMSS) de forma sencilla."
+    />
+    <meta
+      name="keywords"
+      content="salario neto México, calculadora sueldo México, ISR México, IMSS, impuestos México, autónomo México, empleado México, salario después de impuestos, sueldo real, calculadora impuestos"
+    />
+    <meta name="author" content="MxNetPay" />
 
     <!-- Favicon SVG - Inline -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2310B981' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2310B981' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E"
+      type="image/svg+xml"
+    />
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            color: #334155; /* Darker text color */
-        }
-        /* Custom Material 3 Expressive-like styles */
-        .card {
-            background-color: #ffffff;
-            border-radius: 2rem; /* More rounded corners */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Deeper shadow */
-        }
-        .input-field {
-            background-color: #e2e8f0; /* Light gray input background */
-            border-radius: 0.75rem;
-            border: none;
-            padding: 0.75rem 1.25rem;
-            color: #1e293b;
-        }
-        .btn-primary {
-            background-color: #10B981; /* Emerald green */
-            color: white;
-            border-radius: 1.5rem;
-            padding: 1rem 2.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #059669; /* Darker emerald */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3); /* Green shadow */
-        }
-        .btn-secondary {
-            background-color: #64748b; /* Slate gray */
-            color: white;
-            border-radius: 1.5rem;
-            padding: 1rem 2.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #475569; /* Darker slate */
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(100, 116, 139, 0.3);
-        }
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 1rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        .tab-button.active {
-            background-color: #3b82f6; /* Blue for active tab */
-            color: white;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
-        }
-        .tab-button:not(.active):hover {
-            background-color: #cbd5e1; /* Light hover for inactive */
-        }
-        .result-box {
-            background-color: #f8fafc; /* Lighter result background */
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 2px solid #bae6fd; /* Light blue border */
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #3b82f6;
-        }
-        input:focus + .slider {
-            box-shadow: 0 0 1px #3b82f6;
-        }
-        input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-        .message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            padding: 2rem;
-            z-index: 1000;
-            display: none; /* Hidden by default */
-        }
-        .message-box button {
-            background-color: #3b82f6;
-            color: white;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            margin-top: 1rem;
-        }
-        .message-box button:hover {
-            background-color: #2563eb;
-        }
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Light blue-gray background */
+        color: #334155; /* Darker text color */
+      }
+      /* Custom Material 3 Expressive-like styles */
+      .card {
+        background-color: #ffffff;
+        border-radius: 2rem; /* More rounded corners */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+      }
+      .input-field {
+        background-color: #e2e8f0; /* Light gray input background */
+        border-radius: 0.75rem;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        color: #1e293b;
+      }
+      .btn-primary {
+        background-color: #10b981; /* Emerald green */
+        color: white;
+        border-radius: 1.5rem;
+        padding: 1rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #059669; /* Darker emerald */
+        transform: translateY(-2px); /* Slight lift effect */
+        box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3); /* Green shadow */
+      }
+      .btn-secondary {
+        background-color: #64748b; /* Slate gray */
+        color: white;
+        border-radius: 1.5rem;
+        padding: 1rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        background-color: #475569; /* Darker slate */
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(100, 116, 139, 0.3);
+      }
+      .tab-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .tab-button.active {
+        background-color: #3b82f6; /* Blue for active tab */
+        color: white;
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+      }
+      .tab-button:not(.active):hover {
+        background-color: #cbd5e1; /* Light hover for inactive */
+      }
+      .result-box {
+        background-color: #f8fafc; /* Lighter result background */
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        border: 2px solid #bae6fd; /* Light blue border */
+      }
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #3b82f6;
+      }
+      input:focus + .slider {
+        box-shadow: 0 0 1px #3b82f6;
+      }
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+      .message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+        z-index: 1000;
+        display: none; /* Hidden by default */
+      }
+      .message-box button {
+        background-color: #3b82f6;
+        color: white;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        margin-top: 1rem;
+      }
+      .message-box button:hover {
+        background-color: #2563eb;
+      }
     </style>
-</head>
-<body class="flex flex-col items-center justify-center min-h-screen py-8 px-4">
-
+  </head>
+  <body
+    class="flex flex-col items-center justify-center min-h-screen py-8 px-4"
+  >
     <!-- Message Box for Alerts -->
     <div id="messageBox" class="message-box text-center">
-        <p id="messageText" class="text-lg font-semibold"></p>
-        <button onclick="hideMessageBox()">OK</button>
+      <p id="messageText" class="text-lg font-semibold"></p>
+      <button onclick="hideMessageBox()">OK</button>
     </div>
 
     <header class="w-full max-w-2xl text-center mb-8">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
-            <span class="text-emerald-500">MxNetPay</span>
-        </h1>
-        <p id="tagline" class="text-xl text-gray-600 mb-6">
-            Calcula tu sueldo neto en México, fácil y rápido.
-        </p>
-        <div class="flex justify-center items-center space-x-4">
-            <span id="langEs" class="text-gray-700 font-semibold cursor-pointer" onclick="setLanguage('es')">Español</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="languageToggle" onchange="toggleLanguage()">
-                <span class="slider"></span>
-            </label>
-            <span id="langEn" class="text-gray-400 font-semibold cursor-pointer" onclick="setLanguage('en')">English</span>
-        </div>
+      <h1
+        class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight"
+      >
+        <span class="text-emerald-500">MxNetPay</span>
+      </h1>
+      <p id="tagline" class="text-xl text-gray-600 mb-6">
+        Calcula tu sueldo neto en México, fácil y rápido.
+      </p>
+      <div class="flex justify-center items-center space-x-4">
+        <span
+          id="langEs"
+          class="text-gray-700 font-semibold cursor-pointer"
+          onclick="setLanguage('es')"
+          >Español</span
+        >
+        <label class="toggle-switch">
+          <input
+            type="checkbox"
+            id="languageToggle"
+            onchange="toggleLanguage()"
+          />
+          <span class="slider"></span>
+        </label>
+        <span
+          id="langEn"
+          class="text-gray-400 font-semibold cursor-pointer"
+          onclick="setLanguage('en')"
+          >English</span
+        >
+      </div>
     </header>
 
     <main class="w-full max-w-2xl card p-8 md:p-10">
-        <div class="flex justify-center mb-6 space-x-4">
-            <button id="tabEmployee" class="tab-button active" onclick="switchTab('employee')">
-                <span id="btnEmployeeText">Empleado</span>
-            </button>
-            <button id="tabFreelancer" class="tab-button" onclick="switchTab('freelancer')">
-                <span id="btnFreelancerText">Autónomo / Empresario</span>
-            </button>
+      <div class="flex justify-center mb-6 space-x-4">
+        <button
+          id="tabEmployee"
+          class="tab-button active"
+          onclick="switchTab('employee')"
+        >
+          <span id="btnEmployeeText">Empleado</span>
+        </button>
+        <button
+          id="tabFreelancer"
+          class="tab-button"
+          onclick="switchTab('freelancer')"
+        >
+          <span id="btnFreelancerText">Autónomo / Empresario</span>
+        </button>
+      </div>
+
+      <section id="employeeSection">
+        <h2
+          id="employeeTitle"
+          class="text-2xl font-bold text-gray-800 mb-6 text-center"
+        >
+          Calculadora de Sueldo Neto (Empleado)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              for="grossSalaryEmployee"
+              id="labelGrossSalaryEmployee"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >Salario Bruto Mensual (MXN)</label
+            >
+            <input
+              type="number"
+              id="grossSalaryEmployee"
+              class="input-field w-full"
+              placeholder="Ej: 15000"
+              min="0"
+            />
+          </div>
+          <div>
+            <label
+              for="otherDeductionsEmployee"
+              id="labelOtherDeductionsEmployee"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >Otras Deducciones (MXN)</label
+            >
+            <input
+              type="number"
+              id="otherDeductionsEmployee"
+              class="input-field w-full"
+              placeholder="Ej: 500"
+              value="0"
+              min="0"
+            />
+          </div>
         </div>
+        <button
+          id="calculateBtnEmployee"
+          class="btn-primary w-full mt-8"
+          onclick="calculateNetSalary()"
+        >
+          Calcular Salario Neto
+        </button>
+      </section>
 
-        <section id="employeeSection">
-            <h2 id="employeeTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">Calculadora de Sueldo Neto (Empleado)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="grossSalaryEmployee" id="labelGrossSalaryEmployee" class="block text-gray-700 text-sm font-medium mb-2">Salario Bruto Mensual (MXN)</label>
-                    <input type="number" id="grossSalaryEmployee" class="input-field w-full" placeholder="Ej: 15000" min="0">
-                </div>
-                <div>
-                    <label for="otherDeductionsEmployee" id="labelOtherDeductionsEmployee" class="block text-gray-700 text-sm font-medium mb-2">Otras Deducciones (MXN)</label>
-                    <input type="number" id="otherDeductionsEmployee" class="input-field w-full" placeholder="Ej: 500" value="0" min="0">
-                </div>
-            </div>
-            <button id="calculateBtnEmployee" class="btn-primary w-full mt-8" onclick="calculateNetSalary()">Calcular Salario Neto</button>
-        </section>
-
-        <section id="freelancerSection" class="hidden">
-            <h2 id="freelancerTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">Calculadora de Ingreso Neto (Autónomo / Empresario)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="grossIncomeFreelancer" id="labelGrossIncomeFreelancer" class="block text-gray-700 text-sm font-medium mb-2">Ingreso Bruto Mensual (MXN)</label>
-                    <input type="number" id="grossIncomeFreelancer" class="input-field w-full" placeholder="Ej: 25000" min="0">
-                </div>
-                <div>
-                    <label for="allowableDeductionsFreelancer" id="labelAllowableDeductionsFreelancer" class="block text-gray-700 text-sm font-medium mb-2">Deducciones Autorizadas (MXN)</label>
-                    <input type="number" id="allowableDeductionsFreelancer" class="input-field w-full" placeholder="Ej: 7000" value="0" min="0">
-                </div>
-                <div>
-                    <label for="ivaCollected" id="labelIvaCollected" class="block text-gray-700 text-sm font-medium mb-2">IVA Cobrado (MXN)</label>
-                    <input type="number" id="ivaCollected" class="input-field w-full" placeholder="Ej: 3200" value="0" min="0">
-                    <p id="ivaNote" class="text-xs text-gray-500 mt-1">
-                        Nota: El IVA cobrado se muestra con fines informativos; no se resta directamente del ingreso para el cálculo del neto personal, ya que es un impuesto a trasladar.
-                    </p>
-                </div>
-                <div>
-                    <label for="isrWithholding" id="labelIsrWithholding" class="block text-gray-700 text-sm font-medium mb-2">ISR Retenido (MXN)</label>
-                    <input type="number" id="isrWithholding" class="input-field w-full" placeholder="Ej: 1500" value="0" min="0">
-                    <p id="withholdingNote" class="text-xs text-gray-500 mt-1">
-                        El ISR retenido reduce tu pago de impuestos, pero se considera en tu declaración anual. Aquí se resta para dar una estimación más cercana al efectivo disponible.
-                    </p>
-                </div>
-            </div>
-            <button id="calculateBtnFreelancer" class="btn-primary w-full mt-8" onclick="calculateNetIncomeFreelancer()">Calcular Ingreso Neto</button>
-        </section>
-
-        <section id="resultsSection" class="mt-8 pt-8 border-t border-gray-200 hidden">
-            <h3 id="resultsTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">Resultados del Cálculo</h3>
-            <div class="result-box mb-4">
-                <p id="netIncomeLabel" class="text-gray-600 text-lg font-medium mb-2">Salario Neto Mensual:</p>
-                <p id="netIncome" class="text-4xl font-extrabold text-emerald-600 mb-4">MXN 0.00</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p id="grossInputLabel" class="text-gray-500">Salario Bruto Ingresado:</p>
-                        <p id="grossInput" class="font-medium text-gray-700">MXN 0.00</p>
-                    </div>
-                    <div>
-                        <p id="isrDeductionLabel" class="text-gray-500">Deducción de ISR:</p>
-                        <p id="isrDeduction" class="font-medium text-red-500">MXN 0.00</p>
-                    </div>
-                    <div id="imssRow" class="hidden">
-                        <p id="imssDeductionLabel" class="text-gray-500">Deducción de IMSS:</p>
-                        <p id="imssDeduction" class="font-medium text-red-500">MXN 0.00</p>
-                    </div>
-                    <div id="subsidyRow" class="hidden">
-                        <p id="subsidyLabel" class="text-gray-500">Subsidio para el Empleo:</p>
-                        <p id="subsidyAmount" class="font-medium text-blue-500">MXN 0.00</p>
-                    </div>
-                    <div id="otherDeductionsRow">
-                        <p id="otherDeductionsLabel" class="text-gray-500">Otras Deducciones:</p>
-                        <p id="otherDeductions" class="font-medium text-red-500">MXN 0.00</p>
-                    </div>
-                     <div id="ivaInfoRow" class="hidden">
-                        <p id="ivaInfoLabel" class="text-gray-500">IVA Cobrado (informativo):</p>
-                        <p id="ivaInfoAmount" class="font-medium text-gray-700">MXN 0.00</p>
-                    </div>
-                     <div id="isrWithholdingRow" class="hidden">
-                        <p id="isrWithholdingInfoLabel" class="text-gray-500">ISR Retenido (ajuste):</p>
-                        <p id="isrWithholdingInfoAmount" class="font-medium text-blue-500">MXN 0.00</p>
-                    </div>
-                </div>
-            </div>
-            <p id="disclaimer" class="text-sm text-gray-500 text-center mt-6">
-                *Estos cálculos son estimaciones basadas en las leyes fiscales mexicanas actuales (2024/2025) y propósitos educativos. Se recomienda consultar a un contador para cálculos exactos y asesoramiento fiscal personalizado.
+      <section id="freelancerSection" class="hidden">
+        <h2
+          id="freelancerTitle"
+          class="text-2xl font-bold text-gray-800 mb-6 text-center"
+        >
+          Calculadora de Ingreso Neto (Autónomo / Empresario)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              for="grossIncomeFreelancer"
+              id="labelGrossIncomeFreelancer"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >Ingreso Bruto Mensual (MXN)</label
+            >
+            <input
+              type="number"
+              id="grossIncomeFreelancer"
+              class="input-field w-full"
+              placeholder="Ej: 25000"
+              min="0"
+            />
+          </div>
+          <div>
+            <label
+              for="allowableDeductionsFreelancer"
+              id="labelAllowableDeductionsFreelancer"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >Deducciones Autorizadas (MXN)</label
+            >
+            <input
+              type="number"
+              id="allowableDeductionsFreelancer"
+              class="input-field w-full"
+              placeholder="Ej: 7000"
+              value="0"
+              min="0"
+            />
+          </div>
+          <div>
+            <label
+              for="ivaCollected"
+              id="labelIvaCollected"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >IVA Cobrado (MXN)</label
+            >
+            <input
+              type="number"
+              id="ivaCollected"
+              class="input-field w-full"
+              placeholder="Ej: 3200"
+              value="0"
+              min="0"
+            />
+            <p id="ivaNote" class="text-xs text-gray-500 mt-1">
+              Nota: El IVA cobrado se muestra con fines informativos; no se
+              resta directamente del ingreso para el cálculo del neto personal,
+              ya que es un impuesto a trasladar.
             </p>
-            <button id="saveCalculationBtn" class="btn-secondary w-full mt-6" onclick="saveCalculation()">
-                <span id="saveCalcText">Guardar Cálculo</span>
-            </button>
-        </section>
+          </div>
+          <div>
+            <label
+              for="isrWithholding"
+              id="labelIsrWithholding"
+              class="block text-gray-700 text-sm font-medium mb-2"
+              >ISR Retenido (MXN)</label
+            >
+            <input
+              type="number"
+              id="isrWithholding"
+              class="input-field w-full"
+              placeholder="Ej: 1500"
+              value="0"
+              min="0"
+            />
+            <p id="withholdingNote" class="text-xs text-gray-500 mt-1">
+              El ISR retenido reduce tu pago de impuestos, pero se considera en
+              tu declaración anual. Aquí se resta para dar una estimación más
+              cercana al efectivo disponible.
+            </p>
+          </div>
+        </div>
+        <button
+          id="calculateBtnFreelancer"
+          class="btn-primary w-full mt-8"
+          onclick="calculateNetIncomeFreelancer()"
+        >
+          Calcular Ingreso Neto
+        </button>
+      </section>
 
-        <section id="savedCalculationsSection" class="mt-8 pt-8 border-t border-gray-200 hidden">
-            <h3 id="savedCalcTitle" class="text-2xl font-bold text-gray-800 mb-6 text-center">Cálculos Guardados</h3>
-            <div id="savedCalculationsList" class="space-y-4">
-                <!-- Saved calculations will be loaded here -->
+      <section
+        id="resultsSection"
+        class="mt-8 pt-8 border-t border-gray-200 hidden"
+      >
+        <h3
+          id="resultsTitle"
+          class="text-2xl font-bold text-gray-800 mb-6 text-center"
+        >
+          Resultados del Cálculo
+        </h3>
+        <div class="result-box mb-4">
+          <p id="netIncomeLabel" class="text-gray-600 text-lg font-medium mb-2">
+            Salario Neto Mensual:
+          </p>
+          <p
+            id="netIncome"
+            class="text-4xl font-extrabold text-emerald-600 mb-4"
+          >
+            MXN 0.00
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p id="grossInputLabel" class="text-gray-500">
+                Salario Bruto Ingresado:
+              </p>
+              <p id="grossInput" class="font-medium text-gray-700">MXN 0.00</p>
             </div>
-            <button id="clearSavedBtn" class="btn-secondary w-full mt-6 bg-red-500 hover:bg-red-600" onclick="clearSavedCalculations()">
-                <span id="clearSavedText">Borrar Cálculos Guardados</span>
-            </button>
-        </section>
+            <div>
+              <p id="isrDeductionLabel" class="text-gray-500">
+                Deducción de ISR:
+              </p>
+              <p id="isrDeduction" class="font-medium text-red-500">MXN 0.00</p>
+            </div>
+            <div id="imssRow" class="hidden">
+              <p id="imssDeductionLabel" class="text-gray-500">
+                Deducción de IMSS:
+              </p>
+              <p id="imssDeduction" class="font-medium text-red-500">
+                MXN 0.00
+              </p>
+            </div>
+            <div id="subsidyRow" class="hidden">
+              <p id="subsidyLabel" class="text-gray-500">
+                Subsidio para el Empleo:
+              </p>
+              <p id="subsidyAmount" class="font-medium text-blue-500">
+                MXN 0.00
+              </p>
+            </div>
+            <div id="otherDeductionsRow">
+              <p id="otherDeductionsLabel" class="text-gray-500">
+                Otras Deducciones:
+              </p>
+              <p id="otherDeductions" class="font-medium text-red-500">
+                MXN 0.00
+              </p>
+            </div>
+            <div id="ivaInfoRow" class="hidden">
+              <p id="ivaInfoLabel" class="text-gray-500">
+                IVA Cobrado (informativo):
+              </p>
+              <p id="ivaInfoAmount" class="font-medium text-gray-700">
+                MXN 0.00
+              </p>
+            </div>
+            <div id="isrWithholdingRow" class="hidden">
+              <p id="isrWithholdingInfoLabel" class="text-gray-500">
+                ISR Retenido (ajuste):
+              </p>
+              <p
+                id="isrWithholdingInfoAmount"
+                class="font-medium text-blue-500"
+              >
+                MXN 0.00
+              </p>
+            </div>
+          </div>
+        </div>
+        <p id="disclaimer" class="text-sm text-gray-500 text-center mt-6">
+          *Estos cálculos son estimaciones basadas en las leyes fiscales
+          mexicanas actuales (2024/2025) y propósitos educativos. Se recomienda
+          consultar a un contador para cálculos exactos y asesoramiento fiscal
+          personalizado.
+        </p>
+        <button
+          id="saveCalculationBtn"
+          class="btn-secondary w-full mt-6"
+          onclick="saveCalculation()"
+        >
+          <span id="saveCalcText">Guardar Cálculo</span>
+        </button>
+      </section>
 
+      <section
+        id="savedCalculationsSection"
+        class="mt-8 pt-8 border-t border-gray-200 hidden"
+      >
+        <h3
+          id="savedCalcTitle"
+          class="text-2xl font-bold text-gray-800 mb-6 text-center"
+        >
+          Cálculos Guardados
+        </h3>
+        <div id="savedCalculationsList" class="space-y-4">
+          <!-- Saved calculations will be loaded here -->
+        </div>
+        <button
+          id="clearSavedBtn"
+          class="btn-secondary w-full mt-6 bg-red-500 hover:bg-red-600"
+          onclick="clearSavedCalculations()"
+        >
+          <span id="clearSavedText">Borrar Cálculos Guardados</span>
+        </button>
+      </section>
     </main>
 
     <footer class="w-full max-w-2xl text-center mt-8 text-gray-500 text-sm">
-        <p>&copy; 2024 MxNetPay. <span id="rightsText">Todos los derechos reservados.</span></p>
-        <p id="contactText">Para consultas fiscales exactas, consulte a un profesional.</p>
+      <p>
+        &copy; 2024 MxNetPay.
+        <span id="rightsText">Todos los derechos reservados.</span>
+      </p>
+      <p id="contactText">
+        Para consultas fiscales exactas, consulte a un profesional.
+      </p>
     </footer>
 
     <script>
-        // Global variables for language and current user type
-        let currentLanguage = 'es'; // Default language
-        let currentUserType = 'employee'; // Default user type
+      // Global variables for language and current user type
+      let currentLanguage = "es"; // Default language
+      let currentUserType = "employee"; // Default user type
 
-        // DOM elements references for easier access
-        const elements = {
-            tagline: document.getElementById('tagline'),
-            langEs: document.getElementById('langEs'),
-            langEn: document.getElementById('langEn'),
-            languageToggle: document.getElementById('languageToggle'),
-            tabEmployee: document.getElementById('tabEmployee'),
-            tabFreelancer: document.getElementById('tabFreelancer'),
-            btnEmployeeText: document.getElementById('btnEmployeeText'),
-            btnFreelancerText: document.getElementById('btnFreelancerText'),
-            employeeSection: document.getElementById('employeeSection'),
-            freelancerSection: document.getElementById('freelancerSection'),
-            employeeTitle: document.getElementById('employeeTitle'),
-            freelancerTitle: document.getElementById('freelancerTitle'),
-            labelGrossSalaryEmployee: document.getElementById('labelGrossSalaryEmployee'),
-            grossSalaryEmployee: document.getElementById('grossSalaryEmployee'),
-            labelOtherDeductionsEmployee: document.getElementById('labelOtherDeductionsEmployee'),
-            otherDeductionsEmployee: document.getElementById('otherDeductionsEmployee'),
-            calculateBtnEmployee: document.getElementById('calculateBtnEmployee'),
-            labelGrossIncomeFreelancer: document.getElementById('labelGrossIncomeFreelancer'),
-            grossIncomeFreelancer: document.getElementById('grossIncomeFreelancer'),
-            labelAllowableDeductionsFreelancer: document.getElementById('labelAllowableDeductionsFreelancer'),
-            allowableDeductionsFreelancer: document.getElementById('allowableDeductionsFreelancer'),
-            labelIvaCollected: document.getElementById('labelIvaCollected'),
-            ivaCollected: document.getElementById('ivaCollected'),
-            ivaNote: document.getElementById('ivaNote'),
-            labelIsrWithholding: document.getElementById('labelIsrWithholding'),
-            isrWithholding: document.getElementById('isrWithholding'),
-            withholdingNote: document.getElementById('withholdingNote'),
-            calculateBtnFreelancer: document.getElementById('calculateBtnFreelancer'),
-            resultsSection: document.getElementById('resultsSection'),
-            resultsTitle: document.getElementById('resultsTitle'),
-            netIncomeLabel: document.getElementById('netIncomeLabel'),
-            netIncome: document.getElementById('netIncome'),
-            grossInputLabel: document.getElementById('grossInputLabel'),
-            grossInput: document.getElementById('grossInput'),
-            isrDeductionLabel: document.getElementById('isrDeductionLabel'),
-            isrDeduction: document.getElementById('isrDeduction'),
-            imssRow: document.getElementById('imssRow'),
-            imssDeductionLabel: document.getElementById('imssDeductionLabel'),
-            imssDeduction: document.getElementById('imssDeduction'),
-            subsidyRow: document.getElementById('subsidyRow'),
-            subsidyLabel: document.getElementById('subsidyLabel'),
-            subsidyAmount: document.getElementById('subsidyAmount'),
-            otherDeductionsRow: document.getElementById('otherDeductionsRow'),
-            otherDeductionsLabel: document.getElementById('otherDeductionsLabel'),
-            otherDeductions: document.getElementById('otherDeductions'),
-            ivaInfoRow: document.getElementById('ivaInfoRow'),
-            ivaInfoLabel: document.getElementById('ivaInfoLabel'),
-            ivaInfoAmount: document.getElementById('ivaInfoAmount'),
-            isrWithholdingRow: document.getElementById('isrWithholdingRow'),
-            isrWithholdingInfoLabel: document.getElementById('isrWithholdingInfoLabel'),
-            isrWithholdingInfoAmount: document.getElementById('isrWithholdingInfoAmount'),
-            disclaimer: document.getElementById('disclaimer'),
-            saveCalculationBtn: document.getElementById('saveCalculationBtn'),
-            saveCalcText: document.getElementById('saveCalcText'),
-            savedCalculationsSection: document.getElementById('savedCalculationsSection'),
-            savedCalcTitle: document.getElementById('savedCalcTitle'),
-            savedCalculationsList: document.getElementById('savedCalculationsList'),
-            clearSavedBtn: document.getElementById('clearSavedBtn'),
-            clearSavedText: document.getElementById('clearSavedText'),
-            rightsText: document.getElementById('rightsText'),
-            contactText: document.getElementById('contactText'),
-            messageBox: document.getElementById('messageBox'),
-            messageText: document.getElementById('messageText')
-        };
+      // DOM elements references for easier access
+      const elements = {
+        tagline: document.getElementById("tagline"),
+        langEs: document.getElementById("langEs"),
+        langEn: document.getElementById("langEn"),
+        languageToggle: document.getElementById("languageToggle"),
+        tabEmployee: document.getElementById("tabEmployee"),
+        tabFreelancer: document.getElementById("tabFreelancer"),
+        btnEmployeeText: document.getElementById("btnEmployeeText"),
+        btnFreelancerText: document.getElementById("btnFreelancerText"),
+        employeeSection: document.getElementById("employeeSection"),
+        freelancerSection: document.getElementById("freelancerSection"),
+        employeeTitle: document.getElementById("employeeTitle"),
+        freelancerTitle: document.getElementById("freelancerTitle"),
+        labelGrossSalaryEmployee: document.getElementById(
+          "labelGrossSalaryEmployee"
+        ),
+        grossSalaryEmployee: document.getElementById("grossSalaryEmployee"),
+        labelOtherDeductionsEmployee: document.getElementById(
+          "labelOtherDeductionsEmployee"
+        ),
+        otherDeductionsEmployee: document.getElementById(
+          "otherDeductionsEmployee"
+        ),
+        calculateBtnEmployee: document.getElementById("calculateBtnEmployee"),
+        labelGrossIncomeFreelancer: document.getElementById(
+          "labelGrossIncomeFreelancer"
+        ),
+        grossIncomeFreelancer: document.getElementById("grossIncomeFreelancer"),
+        labelAllowableDeductionsFreelancer: document.getElementById(
+          "labelAllowableDeductionsFreelancer"
+        ),
+        allowableDeductionsFreelancer: document.getElementById(
+          "allowableDeductionsFreelancer"
+        ),
+        labelIvaCollected: document.getElementById("labelIvaCollected"),
+        ivaCollected: document.getElementById("ivaCollected"),
+        ivaNote: document.getElementById("ivaNote"),
+        labelIsrWithholding: document.getElementById("labelIsrWithholding"),
+        isrWithholding: document.getElementById("isrWithholding"),
+        withholdingNote: document.getElementById("withholdingNote"),
+        calculateBtnFreelancer: document.getElementById(
+          "calculateBtnFreelancer"
+        ),
+        resultsSection: document.getElementById("resultsSection"),
+        resultsTitle: document.getElementById("resultsTitle"),
+        netIncomeLabel: document.getElementById("netIncomeLabel"),
+        netIncome: document.getElementById("netIncome"),
+        grossInputLabel: document.getElementById("grossInputLabel"),
+        grossInput: document.getElementById("grossInput"),
+        isrDeductionLabel: document.getElementById("isrDeductionLabel"),
+        isrDeduction: document.getElementById("isrDeduction"),
+        imssRow: document.getElementById("imssRow"),
+        imssDeductionLabel: document.getElementById("imssDeductionLabel"),
+        imssDeduction: document.getElementById("imssDeduction"),
+        subsidyRow: document.getElementById("subsidyRow"),
+        subsidyLabel: document.getElementById("subsidyLabel"),
+        subsidyAmount: document.getElementById("subsidyAmount"),
+        otherDeductionsRow: document.getElementById("otherDeductionsRow"),
+        otherDeductionsLabel: document.getElementById("otherDeductionsLabel"),
+        otherDeductions: document.getElementById("otherDeductions"),
+        ivaInfoRow: document.getElementById("ivaInfoRow"),
+        ivaInfoLabel: document.getElementById("ivaInfoLabel"),
+        ivaInfoAmount: document.getElementById("ivaInfoAmount"),
+        isrWithholdingRow: document.getElementById("isrWithholdingRow"),
+        isrWithholdingInfoLabel: document.getElementById(
+          "isrWithholdingInfoLabel"
+        ),
+        isrWithholdingInfoAmount: document.getElementById(
+          "isrWithholdingInfoAmount"
+        ),
+        disclaimer: document.getElementById("disclaimer"),
+        saveCalculationBtn: document.getElementById("saveCalculationBtn"),
+        saveCalcText: document.getElementById("saveCalcText"),
+        savedCalculationsSection: document.getElementById(
+          "savedCalculationsSection"
+        ),
+        savedCalcTitle: document.getElementById("savedCalcTitle"),
+        savedCalculationsList: document.getElementById("savedCalculationsList"),
+        clearSavedBtn: document.getElementById("clearSavedBtn"),
+        clearSavedText: document.getElementById("clearSavedText"),
+        rightsText: document.getElementById("rightsText"),
+        contactText: document.getElementById("contactText"),
+        messageBox: document.getElementById("messageBox"),
+        messageText: document.getElementById("messageText"),
+      };
 
-        // --- Localization Texts ---
-        const texts = {
-            es: {
-                tagline: "Calcula tu sueldo neto en México, fácil y rápido.",
-                btnEmployeeText: "Empleado",
-                btnFreelancerText: "Autónomo / Empresario",
-                employeeTitle: "Calculadora de Sueldo Neto (Empleado)",
-                freelancerTitle: "Calculadora de Ingreso Neto (Autónomo / Empresario)",
-                labelGrossSalaryEmployee: "Salario Bruto Mensual (MXN)",
-                labelOtherDeductionsEmployee: "Otras Deducciones (MXN)",
-                calculateBtnEmployee: "Calcular Salario Neto",
-                labelGrossIncomeFreelancer: "Ingreso Bruto Mensual (MXN)",
-                labelAllowableDeductionsFreelancer: "Deducciones Autorizadas (MXN)",
-                labelIvaCollected: "IVA Cobrado (MXN)",
-                ivaNote: "Nota: El IVA cobrado se muestra con fines informativos; no se resta directamente del ingreso para el cálculo del neto personal, ya que es un impuesto a trasladar.",
-                labelIsrWithholding: "ISR Retenido (MXN)",
-                withholdingNote: "El ISR retenido reduce tu pago de impuestos, pero se considera en tu declaración anual. Aquí se resta para dar una estimación más cercana al efectivo disponible.",
-                calculateBtnFreelancer: "Calcular Ingreso Neto",
-                resultsTitle: "Resultados del Cálculo",
-                netIncomeLabel: "Salario Neto Mensual:",
-                grossInputLabel: "Salario Bruto Ingresado:",
-                isrDeductionLabel: "Deducción de ISR:",
-                imssDeductionLabel: "Deducción de IMSS:",
-                subsidyLabel: "Subsidio para el Empleo:",
-                otherDeductionsLabel: "Otras Deducciones:",
-                ivaInfoLabel: "IVA Cobrado (informativo):",
-                isrWithholdingInfoLabel: "ISR Retenido (ajuste):",
-                disclaimer: "*Estos cálculos son estimaciones basadas en las leyes fiscales mexicanas actuales (2024/2025) y propósitos educativos. Se recomienda consultar a un contador para cálculos exactos y asesoramiento fiscal personalizado.",
-                saveCalcText: "Guardar Cálculo",
-                savedCalcTitle: "Cálculos Guardados",
-                clearSavedText: "Borrar Cálculos Guardados",
-                rightsText: "Todos los derechos reservados.",
-                contactText: "Para consultas fiscales exactas, consulte a un profesional.",
-                noSavedCalculations: "No hay cálculos guardados aún.",
-                calculationSaved: "¡Cálculo guardado exitosamente!",
-                inputError: "Por favor, ingresa un número válido para el salario bruto/ingreso bruto.",
-                clearConfirm: "¿Estás seguro de que quieres borrar todos los cálculos guardados?"
-            },
-            en: {
-                tagline: "Calculate your net salary in Mexico, easy and fast.",
-                btnEmployeeText: "Employee",
-                btnFreelancerText: "Freelancer / Business Owner",
-                employeeTitle: "Net Salary Calculator (Employee)",
-                freelancerTitle: "Net Income Calculator (Freelancer / Business Owner)",
-                labelGrossSalaryEmployee: "Gross Monthly Salary (MXN)",
-                labelOtherDeductionsEmployee: "Other Deductions (MXN)",
-                calculateBtnEmployee: "Calculate Net Salary",
-                labelGrossIncomeFreelancer: "Gross Monthly Income (MXN)",
-                labelAllowableDeductionsFreelancer: "Allowable Deductions (MXN)",
-                labelIvaCollected: "IVA Collected (MXN)",
-                ivaNote: "Note: IVA collected is shown for informational purposes; it is not directly subtracted from income for personal net calculation as it is a tax to be remitted.",
-                labelIsrWithholding: "ISR Withheld (MXN)",
-                withholdingNote: "ISR withheld reduces your tax payment but is considered in your annual declaration. Here it is subtracted to give a closer estimate of available cash.",
-                calculateBtnFreelancer: "Calculate Net Income",
-                resultsTitle: "Calculation Results",
-                netIncomeLabel: "Net Monthly Income:",
-                grossInputLabel: "Gross Income Entered:",
-                isrDeductionLabel: "ISR Deduction:",
-                imssDeductionLabel: "IMSS Deduction:",
-                subsidyLabel: "Employment Subsidy:",
-                otherDeductionsLabel: "Other Deductions:",
-                ivaInfoLabel: "IVA Collected (informational):",
-                isrWithholdingInfoLabel: "ISR Withheld (adjustment):",
-                disclaimer: "*These calculations are estimates based on current Mexican tax laws (2024/2025) and for educational purposes. It is recommended to consult an accountant for exact calculations and personalized tax advice.",
-                saveCalcText: "Save Calculation",
-                savedCalcTitle: "Saved Calculations",
-                clearSavedText: "Clear Saved Calculations",
-                rightsText: "All rights reserved.",
-                contactText: "For exact tax inquiries, consult a professional.",
-                noSavedCalculations: "No calculations saved yet.",
-                calculationSaved: "Calculation saved successfully!",
-                inputError: "Please enter a valid number for gross salary/income.",
-                clearConfirm: "Are you sure you want to clear all saved calculations?"
+      // --- Localization Texts ---
+      const texts = {
+        es: {
+          tagline: "Calcula tu sueldo neto en México, fácil y rápido.",
+          btnEmployeeText: "Empleado",
+          btnFreelancerText: "Autónomo / Empresario",
+          employeeTitle: "Calculadora de Sueldo Neto (Empleado)",
+          freelancerTitle:
+            "Calculadora de Ingreso Neto (Autónomo / Empresario)",
+          labelGrossSalaryEmployee: "Salario Bruto Mensual (MXN)",
+          labelOtherDeductionsEmployee: "Otras Deducciones (MXN)",
+          calculateBtnEmployee: "Calcular Salario Neto",
+          labelGrossIncomeFreelancer: "Ingreso Bruto Mensual (MXN)",
+          labelAllowableDeductionsFreelancer: "Deducciones Autorizadas (MXN)",
+          labelIvaCollected: "IVA Cobrado (MXN)",
+          ivaNote:
+            "Nota: El IVA cobrado se muestra con fines informativos; no se resta directamente del ingreso para el cálculo del neto personal, ya que es un impuesto a trasladar.",
+          labelIsrWithholding: "ISR Retenido (MXN)",
+          withholdingNote:
+            "El ISR retenido reduce tu pago de impuestos, pero se considera en tu declaración anual. Aquí se resta para dar una estimación más cercana al efectivo disponible.",
+          calculateBtnFreelancer: "Calcular Ingreso Neto",
+          resultsTitle: "Resultados del Cálculo",
+          netIncomeLabel: "Salario Neto Mensual:",
+          grossInputLabel: "Salario Bruto Ingresado:",
+          isrDeductionLabel: "Deducción de ISR:",
+          imssDeductionLabel: "Deducción de IMSS:",
+          subsidyLabel: "Subsidio para el Empleo:",
+          otherDeductionsLabel: "Otras Deducciones:",
+          ivaInfoLabel: "IVA Cobrado (informativo):",
+          isrWithholdingInfoLabel: "ISR Retenido (ajuste):",
+          disclaimer:
+            "*Estos cálculos son estimaciones basadas en las leyes fiscales mexicanas actuales (2024/2025) y propósitos educativos. Se recomienda consultar a un contador para cálculos exactos y asesoramiento fiscal personalizado.",
+          saveCalcText: "Guardar Cálculo",
+          savedCalcTitle: "Cálculos Guardados",
+          clearSavedText: "Borrar Cálculos Guardados",
+          rightsText: "Todos los derechos reservados.",
+          contactText:
+            "Para consultas fiscales exactas, consulte a un profesional.",
+          noSavedCalculations: "No hay cálculos guardados aún.",
+          calculationSaved: "¡Cálculo guardado exitosamente!",
+          inputError:
+            "Por favor, ingresa un número válido para el salario bruto/ingreso bruto.",
+          clearConfirm:
+            "¿Estás seguro de que quieres borrar todos los cálculos guardados?",
+        },
+        en: {
+          tagline: "Calculate your net salary in Mexico, easy and fast.",
+          btnEmployeeText: "Employee",
+          btnFreelancerText: "Freelancer / Business Owner",
+          employeeTitle: "Net Salary Calculator (Employee)",
+          freelancerTitle:
+            "Net Income Calculator (Freelancer / Business Owner)",
+          labelGrossSalaryEmployee: "Gross Monthly Salary (MXN)",
+          labelOtherDeductionsEmployee: "Other Deductions (MXN)",
+          calculateBtnEmployee: "Calculate Net Salary",
+          labelGrossIncomeFreelancer: "Gross Monthly Income (MXN)",
+          labelAllowableDeductionsFreelancer: "Allowable Deductions (MXN)",
+          labelIvaCollected: "IVA Collected (MXN)",
+          ivaNote:
+            "Note: IVA collected is shown for informational purposes; it is not directly subtracted from income for personal net calculation as it is a tax to be remitted.",
+          labelIsrWithholding: "ISR Withheld (MXN)",
+          withholdingNote:
+            "ISR withheld reduces your tax payment but is considered in your annual declaration. Here it is subtracted to give a closer estimate of available cash.",
+          calculateBtnFreelancer: "Calculate Net Income",
+          resultsTitle: "Calculation Results",
+          netIncomeLabel: "Net Monthly Income:",
+          grossInputLabel: "Gross Income Entered:",
+          isrDeductionLabel: "ISR Deduction:",
+          imssDeductionLabel: "IMSS Deduction:",
+          subsidyLabel: "Employment Subsidy:",
+          otherDeductionsLabel: "Other Deductions:",
+          ivaInfoLabel: "IVA Collected (informational):",
+          isrWithholdingInfoLabel: "ISR Withheld (adjustment):",
+          disclaimer:
+            "*These calculations are estimates based on current Mexican tax laws (2024/2025) and for educational purposes. It is recommended to consult an accountant for exact calculations and personalized tax advice.",
+          saveCalcText: "Save Calculation",
+          savedCalcTitle: "Saved Calculations",
+          clearSavedText: "Clear Saved Calculations",
+          rightsText: "All rights reserved.",
+          contactText: "For exact tax inquiries, consult a professional.",
+          noSavedCalculations: "No calculations saved yet.",
+          calculationSaved: "Calculation saved successfully!",
+          inputError: "Please enter a valid number for gross salary/income.",
+          clearConfirm:
+            "Are you sure you want to clear all saved calculations?",
+        },
+      };
+
+      // --- Tax Data (Illustrative for 2024/2025 - Please consult official SAT sources for exact, up-to-date figures) ---
+      // ISR Monthly Tax Brackets for 2024/2025 (Example values, not official)
+      // Fuente: Anexos de la Resolución Miscelánea Fiscal para 2024 (ejemplo)
+      const isrBrackets = [
+        { lower_limit: 0.01, upper_limit: 849.5, fixed_fee: 0.0, rate: 0.0192 },
+        {
+          lower_limit: 849.51,
+          upper_limit: 7196.44,
+          fixed_fee: 16.31,
+          rate: 0.064,
+        },
+        {
+          lower_limit: 7196.45,
+          upper_limit: 12658.2,
+          fixed_fee: 461.34,
+          rate: 0.1088,
+        },
+        {
+          lower_limit: 12658.21,
+          upper_limit: 14757.34,
+          fixed_fee: 1046.06,
+          rate: 0.16,
+        },
+        {
+          lower_limit: 14757.35,
+          upper_limit: 17689.64,
+          fixed_fee: 1374.0,
+          rate: 0.1792,
+        },
+        {
+          lower_limit: 17689.65,
+          upper_limit: 35667.65,
+          fixed_fee: 1902.94,
+          rate: 0.2136,
+        },
+        {
+          lower_limit: 35667.66,
+          upper_limit: 56259.99,
+          fixed_fee: 5822.4,
+          rate: 0.2352,
+        },
+        {
+          lower_limit: 56260.0,
+          upper_limit: 107692.65,
+          fixed_fee: 10609.91,
+          rate: 0.3,
+        },
+        {
+          lower_limit: 107692.66,
+          upper_limit: 143590.2,
+          fixed_fee: 26141.16,
+          rate: 0.32,
+        },
+        {
+          lower_limit: 143590.21,
+          upper_limit: 420875.0,
+          fixed_fee: 37780.85,
+          rate: 0.34,
+        },
+        {
+          lower_limit: 420875.01,
+          upper_limit: Infinity,
+          fixed_fee: 130543.08,
+          rate: 0.35,
+        },
+      ];
+
+      // Employment Subsidy Table (Subsidio al Empleo) for 2024/2025 (Example values, not official)
+      // For informational purposes, this typically applies to lower income brackets and might change.
+      const employmentSubsidy = [
+        { income_limit: 1769.0, subsidy_amount: 407.02 },
+        { income_limit: 2653.0, subsidy_amount: 406.87 },
+        { income_limit: 3472.84, subsidy_amount: 406.88 },
+        { income_limit: 4333.32, subsidy_amount: 406.87 },
+        { income_limit: 5202.97, subsidy_amount: 406.88 },
+        { income_limit: 6079.8, subsidy_amount: 406.87 },
+        { income_limit: 6956.65, subsidy_amount: 406.88 },
+        { income_limit: 7833.5, subsidy_amount: 406.87 },
+        { income_limit: 8710.35, subsidy_amount: 406.88 },
+        { income_limit: 9587.2, subsidy_amount: 406.87 },
+        { income_limit: Infinity, subsidy_amount: 0.0 }, // No subsidy above this
+      ];
+
+      // IMSS Employee Contributions (Example values, not official)
+      // This is highly simplified. Real IMSS calculation involves multiple branches (fixed fee, percentage of excess, etc.)
+      // This example uses a fixed percentage for simplicity, which is NOT how real IMSS is calculated.
+      const imssEmployeeRate = 0.02; // Example: 2% of gross salary for IMSS (very simplified)
+      const imssCap = 25 * 108.57; // Example UMA cap (25 UMAs, UMA value example ~108.57 MXN) - Highly simplified.
+
+      // --- Core Calculation Functions ---
+
+      /**
+       * Calculates the ISR (Impuesto Sobre la Renta) based on gross income and predefined tax brackets.
+       * @param {number} grossIncome - The gross monthly income.
+       * @returns {number} The calculated ISR amount.
+       */
+      function calculateISR(grossIncome) {
+        if (grossIncome <= 0) return 0;
+
+        for (const bracket of isrBrackets) {
+          if (
+            grossIncome > bracket.lower_limit ||
+            (grossIncome >= bracket.lower_limit &&
+              grossIncome <= bracket.upper_limit)
+          ) {
+            const taxableBase = grossIncome - bracket.lower_limit;
+            const isr = taxableBase * bracket.rate + bracket.fixed_fee;
+            return isr;
+          }
+        }
+        return 0; // Should not happen if brackets cover all ranges
+      }
+
+      /**
+       * Calculates the Employment Subsidy (Subsidio al Empleo) based on gross income.
+       * @param {number} grossIncome - The gross monthly income.
+       * @returns {number} The employment subsidy amount.
+       */
+      function getEmploymentSubsidy(grossIncome) {
+        if (grossIncome <= 0) return 0;
+        for (const subsidy of employmentSubsidy) {
+          if (grossIncome <= subsidy.income_limit) {
+            return subsidy.subsidy_amount;
+          }
+        }
+        return 0;
+      }
+
+      /**
+       * Calculates the simplified IMSS employee contribution.
+       * NOTE: This is a highly simplified calculation for demonstration.
+       * Real IMSS contributions are much more complex, involving UMA, fixed fees,
+       * and percentages on surplus income above certain UMAs.
+       * @param {number} grossSalary - The employee's gross monthly salary.
+       * @returns {number} The estimated IMSS contribution.
+       */
+      function calculateIMSS(grossSalary) {
+        if (grossSalary <= 0) return 0;
+        // Example: Simple percentage of salary, capped.
+        const imssContribution = Math.min(
+          grossSalary * imssEmployeeRate,
+          imssCap
+        );
+        return imssContribution;
+      }
+
+      /**
+       * Calculates the net salary for an employee.
+       */
+      function calculateNetSalary() {
+        const grossSalary = parseFloat(elements.grossSalaryEmployee.value);
+        const otherDeductions =
+          parseFloat(elements.otherDeductionsEmployee.value) || 0;
+
+        if (isNaN(grossSalary) || grossSalary < 0) {
+          showMessage(texts[currentLanguage].inputError);
+          return;
+        }
+
+        const isr = calculateISR(grossSalary);
+        const imss = calculateIMSS(grossSalary);
+        const subsidy = getEmploymentSubsidy(grossSalary);
+
+        const totalDeductions = isr + imss + otherDeductions - subsidy; // Subsidy reduces the tax burden
+        const netSalary = grossSalary - totalDeductions;
+
+        displayResults({
+          type: "employee",
+          gross: grossSalary,
+          isr: isr,
+          imss: imss,
+          subsidy: subsidy,
+          other: otherDeductions,
+          net: netSalary,
+          ivaInfo: 0, // Not applicable for employees
+          isrWithholdingInfo: 0, // Not applicable for employees
+        });
+      }
+
+      /**
+       * Calculates the net income for a freelancer/business owner.
+       */
+      function calculateNetIncomeFreelancer() {
+        const grossIncome = parseFloat(elements.grossIncomeFreelancer.value);
+        const allowableDeductions =
+          parseFloat(elements.allowableDeductionsFreelancer.value) || 0;
+        const ivaCollected = parseFloat(elements.ivaCollected.value) || 0;
+        const isrWithholding = parseFloat(elements.isrWithholding.value) || 0;
+
+        if (isNaN(grossIncome) || grossIncome < 0) {
+          showMessage(texts[currentLanguage].inputError);
+          return;
+        }
+
+        // Taxable income for ISR for freelancers is typically Gross Income - Allowable Deductions
+        const taxableIncome = Math.max(0, grossIncome - allowableDeductions);
+        const isr = calculateISR(taxableIncome);
+
+        // For freelancers, we subtract calculated ISR and add back any ISR withheld as it's typically a credit.
+        // However, for "net cash in hand" estimation, subtracting it here provides a realistic immediate take-home.
+        // The note clarifies it's a credit for annual declaration.
+        const netIncome =
+          grossIncome - isr + isrWithholding - allowableDeductions;
+
+        displayResults({
+          type: "freelancer",
+          gross: grossIncome,
+          isr: isr,
+          imss: 0, // Not applicable for freelancers (they pay their own social security directly if they choose)
+          subsidy: 0, // Generally not applicable for business owners, or applied differently
+          other: allowableDeductions, // Renamed 'other' to 'allowable' for freelancer context
+          net: netIncome,
+          ivaInfo: ivaCollected,
+          isrWithholdingInfo: isrWithholding,
+        });
+      }
+
+      /**
+       * Displays the calculation results in the results section.
+       * @param {object} data - An object containing calculation results.
+       */
+      function displayResults(data) {
+        elements.netIncome.textContent = `MXN ${data.net.toLocaleString(
+          "es-MX",
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+        )}`;
+        elements.grossInput.textContent = `MXN ${data.gross.toLocaleString(
+          "es-MX",
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+        )}`;
+        elements.isrDeduction.textContent = `MXN ${data.isr.toLocaleString(
+          "es-MX",
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+        )}`;
+
+        // Hide/Show elements based on user type
+        if (data.type === "employee") {
+          elements.imssRow.classList.remove("hidden");
+          elements.subsidyRow.classList.remove("hidden");
+          elements.otherDeductionsRow.classList.remove("hidden");
+          elements.ivaInfoRow.classList.add("hidden");
+          elements.isrWithholdingRow.classList.add("hidden");
+
+          elements.imssDeduction.textContent = `MXN ${data.imss.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.subsidyAmount.textContent = `MXN ${data.subsidy.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.otherDeductions.textContent = `MXN ${data.other.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.netIncomeLabel.textContent =
+            texts[currentLanguage].netIncomeLabel;
+          elements.grossInputLabel.textContent =
+            texts[currentLanguage].grossInputLabel;
+          elements.otherDeductionsLabel.textContent =
+            texts[currentLanguage].otherDeductionsLabel;
+        } else {
+          // Freelancer
+          elements.imssRow.classList.add("hidden");
+          elements.subsidyRow.classList.add("hidden");
+          elements.otherDeductionsRow.classList.remove("hidden"); // Show allowable deductions
+          elements.ivaInfoRow.classList.remove("hidden");
+          elements.isrWithholdingRow.classList.remove("hidden");
+
+          elements.otherDeductions.textContent = `MXN ${data.other.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.ivaInfoAmount.textContent = `MXN ${data.ivaInfo.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.isrWithholdingInfoAmount.textContent = `MXN ${data.isrWithholdingInfo.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}`;
+          elements.netIncomeLabel.textContent = texts[
+            currentLanguage
+          ].netIncomeLabel.replace("Salario", "Ingreso"); // Adjust label
+          elements.grossInputLabel.textContent = texts[
+            currentLanguage
+          ].grossInputLabel.replace("Salario", "Ingreso");
+          elements.otherDeductionsLabel.textContent =
+            texts[currentLanguage].labelAllowableDeductionsFreelancer; // Use specific label
+        }
+
+        elements.resultsSection.classList.remove("hidden");
+        elements.savedCalculationsSection.classList.remove("hidden"); // Show saved calculations section
+        updateTranslation(); // Ensure results section titles are translated
+      }
+
+      // --- Language Management ---
+
+      /**
+       * Sets the application language.
+       * @param {string} lang - 'es' for Spanish, 'en' for English.
+       */
+      function setLanguage(lang) {
+        currentLanguage = lang;
+        document.documentElement.lang = lang; // Set HTML lang attribute for SEO
+        updateTranslation();
+        // Update toggle switch based on language
+        elements.languageToggle.checked = lang === "en";
+        // Update active state of language text
+        elements.langEs.classList.toggle("text-gray-700", lang === "es");
+        elements.langEs.classList.toggle("text-gray-400", lang === "en");
+        elements.langEn.classList.toggle("text-gray-700", lang === "en");
+        elements.langEn.classList.toggle("text-gray-400", lang === "es");
+      }
+
+      /**
+       * Toggles the language between Spanish and English.
+       */
+      function toggleLanguage() {
+        setLanguage(elements.languageToggle.checked ? "en" : "es");
+      }
+
+      /**
+       * Updates all translatable text elements on the page based on the current language.
+       */
+      function updateTranslation() {
+        const currentTexts = texts[currentLanguage];
+
+        elements.tagline.textContent = currentTexts.tagline;
+        elements.btnEmployeeText.textContent = currentTexts.btnEmployeeText;
+        elements.btnFreelancerText.textContent = currentTexts.btnFreelancerText;
+        elements.employeeTitle.textContent = currentTexts.employeeTitle;
+        elements.freelancerTitle.textContent = currentTexts.freelancerTitle;
+        elements.labelGrossSalaryEmployee.textContent =
+          currentTexts.labelGrossSalaryEmployee;
+        elements.labelOtherDeductionsEmployee.textContent =
+          currentTexts.labelOtherDeductionsEmployee;
+        elements.calculateBtnEmployee.textContent =
+          currentTexts.calculateBtnEmployee;
+        elements.labelGrossIncomeFreelancer.textContent =
+          currentTexts.labelGrossIncomeFreelancer;
+        elements.labelAllowableDeductionsFreelancer.textContent =
+          currentTexts.labelAllowableDeductionsFreelancer;
+        elements.labelIvaCollected.textContent = currentTexts.labelIvaCollected;
+        elements.ivaNote.textContent = currentTexts.ivaNote;
+        elements.labelIsrWithholding.textContent =
+          currentTexts.labelIsrWithholding;
+        elements.withholdingNote.textContent = currentTexts.withholdingNote;
+        elements.calculateBtnFreelancer.textContent =
+          currentTexts.calculateBtnFreelancer;
+        elements.resultsTitle.textContent = currentTexts.resultsTitle;
+        elements.netIncomeLabel.textContent = currentTexts.netIncomeLabel;
+        elements.grossInputLabel.textContent = currentTexts.grossInputLabel;
+        elements.isrDeductionLabel.textContent = currentTexts.isrDeductionLabel;
+        elements.imssDeductionLabel.textContent =
+          currentTexts.imssDeductionLabel;
+        elements.subsidyLabel.textContent = currentTexts.subsidyLabel;
+        elements.otherDeductionsLabel.textContent =
+          currentTexts.otherDeductionsLabel;
+        elements.ivaInfoLabel.textContent = currentTexts.ivaInfoLabel;
+        elements.isrWithholdingInfoLabel.textContent =
+          currentTexts.isrWithholdingInfoLabel;
+        elements.disclaimer.textContent = currentTexts.disclaimer;
+        elements.saveCalcText.textContent = currentTexts.saveCalcText;
+        elements.savedCalcTitle.textContent = currentTexts.savedCalcTitle;
+        elements.clearSavedText.textContent = currentTexts.clearSavedText;
+        elements.rightsText.textContent = currentTexts.rightsText;
+        elements.contactText.textContent = currentTexts.contactText;
+
+        // Re-render saved calculations to update their text
+        loadSavedCalculations();
+      }
+
+      // --- Tab Switching ---
+
+      /**
+       * Switches between employee and freelancer calculation tabs.
+       * @param {string} type - 'employee' or 'freelancer'.
+       */
+      function switchTab(type) {
+        currentUserType = type;
+
+        if (type === "employee") {
+          elements.employeeSection.classList.remove("hidden");
+          elements.freelancerSection.classList.add("hidden");
+          elements.tabEmployee.classList.add("active");
+          elements.tabFreelancer.classList.remove("active");
+          // Clear freelancer inputs when switching
+          elements.grossIncomeFreelancer.value = "";
+          elements.allowableDeductionsFreelancer.value = "0";
+          elements.ivaCollected.value = "0";
+          elements.isrWithholding.value = "0";
+        } else {
+          elements.employeeSection.classList.add("hidden");
+          elements.freelancerSection.classList.remove("hidden");
+          elements.tabEmployee.classList.remove("active");
+          elements.tabFreelancer.classList.add("active");
+          // Clear employee inputs when switching
+          elements.grossSalaryEmployee.value = "";
+          elements.otherDeductionsEmployee.value = "0";
+        }
+        // Hide results section when switching tabs, will reappear on calculation
+        elements.resultsSection.classList.add("hidden");
+      }
+
+      // --- Local Storage Management ---
+
+      /**
+       * Saves the current calculation to local storage.
+       */
+      function saveCalculation() {
+        let calculationData;
+        if (currentUserType === "employee") {
+          const grossSalary = parseFloat(elements.grossSalaryEmployee.value);
+          const otherDeductions =
+            parseFloat(elements.otherDeductionsEmployee.value) || 0;
+          if (isNaN(grossSalary) || grossSalary < 0) {
+            showMessage(texts[currentLanguage].inputError);
+            return;
+          }
+          const isr = calculateISR(grossSalary);
+          const imss = calculateIMSS(grossSalary);
+          const subsidy = getEmploymentSubsidy(grossSalary);
+          const net = grossSalary - (isr + imss + otherDeductions - subsidy);
+          calculationData = {
+            type: currentUserType,
+            gross: grossSalary,
+            otherDeductions: otherDeductions,
+            isr: isr,
+            imss: imss,
+            subsidy: subsidy,
+            net: net,
+            timestamp: new Date().toISOString(),
+          };
+        } else {
+          // Freelancer
+          const grossIncome = parseFloat(elements.grossIncomeFreelancer.value);
+          const allowableDeductions =
+            parseFloat(elements.allowableDeductionsFreelancer.value) || 0;
+          const ivaCollected = parseFloat(elements.ivaCollected.value) || 0;
+          const isrWithholding = parseFloat(elements.isrWithholding.value) || 0;
+          if (isNaN(grossIncome) || grossIncome < 0) {
+            showMessage(texts[currentLanguage].inputError);
+            return;
+          }
+          const taxableIncome = Math.max(0, grossIncome - allowableDeductions);
+          const isr = calculateISR(taxableIncome);
+          const net = grossIncome - isr + isrWithholding - allowableDeductions;
+          calculationData = {
+            type: currentUserType,
+            gross: grossIncome,
+            allowableDeductions: allowableDeductions,
+            ivaCollected: ivaCollected,
+            isrWithholding: isrWithholding,
+            isr: isr,
+            net: net,
+            timestamp: new Date().toISOString(),
+          };
+        }
+
+        let savedCalculations =
+          JSON.parse(localStorage.getItem("mxNetPayCalculations")) || [];
+        savedCalculations.push(calculationData);
+        localStorage.setItem(
+          "mxNetPayCalculations",
+          JSON.stringify(savedCalculations)
+        );
+        showMessage(texts[currentLanguage].calculationSaved);
+        loadSavedCalculations(); // Reload list after saving
+      }
+
+      /**
+       * Loads and displays saved calculations from local storage.
+       */
+      function loadSavedCalculations() {
+        const savedCalculations =
+          JSON.parse(localStorage.getItem("mxNetPayCalculations")) || [];
+        elements.savedCalculationsList.innerHTML = ""; // Clear existing list
+
+        if (savedCalculations.length === 0) {
+          elements.savedCalculationsList.innerHTML = `<p class="text-gray-500 text-center">${texts[currentLanguage].noSavedCalculations}</p>`;
+          return;
+        }
+
+        savedCalculations.forEach((calc, index) => {
+          const date = new Date(calc.timestamp).toLocaleString(
+            currentLanguage === "es" ? "es-MX" : "en-US",
+            {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
             }
-        };
+          );
 
-        // --- Tax Data (Illustrative for 2024/2025 - Please consult official SAT sources for exact, up-to-date figures) ---
-        // ISR Monthly Tax Brackets for 2024/2025 (Example values, not official)
-        // Fuente: Anexos de la Resolución Miscelánea Fiscal para 2024 (ejemplo)
-        const isrBrackets = [
-            { lower_limit: 0.01, upper_limit: 849.50, fixed_fee: 0.00, rate: 0.0192 },
-            { lower_limit: 849.51, upper_limit: 7196.44, fixed_fee: 16.31, rate: 0.0640 },
-            { lower_limit: 7196.45, upper_limit: 12658.20, fixed_fee: 461.34, rate: 0.1088 },
-            { lower_limit: 12658.21, upper_limit: 14757.34, fixed_fee: 1046.06, rate: 0.1600 },
-            { lower_limit: 14757.35, upper_limit: 17689.64, fixed_fee: 1374.00, rate: 0.1792 },
-            { lower_limit: 17689.65, upper_limit: 35667.65, fixed_fee: 1902.94, rate: 0.2136 },
-            { lower_limit: 35667.66, upper_limit: 56259.99, fixed_fee: 5822.40, rate: 0.2352 },
-            { lower_limit: 56260.00, upper_limit: 107692.65, fixed_fee: 10609.91, rate: 0.3000 },
-            { lower_limit: 107692.66, upper_limit: 143590.20, fixed_fee: 26141.16, rate: 0.3200 },
-            { lower_limit: 143590.21, upper_limit: 420875.00, fixed_fee: 37780.85, rate: 0.3400 },
-            { lower_limit: 420875.01, upper_limit: Infinity, fixed_fee: 130543.08, rate: 0.3500 }
-        ];
-
-        // Employment Subsidy Table (Subsidio al Empleo) for 2024/2025 (Example values, not official)
-        // For informational purposes, this typically applies to lower income brackets and might change.
-        const employmentSubsidy = [
-            { income_limit: 1769.00, subsidy_amount: 407.02 },
-            { income_limit: 2653.00, subsidy_amount: 406.87 },
-            { income_limit: 3472.84, subsidy_amount: 406.88 },
-            { income_limit: 4333.32, subsidy_amount: 406.87 },
-            { income_limit: 5202.97, subsidy_amount: 406.88 },
-            { income_limit: 6079.80, subsidy_amount: 406.87 },
-            { income_limit: 6956.65, subsidy_amount: 406.88 },
-            { income_limit: 7833.50, subsidy_amount: 406.87 },
-            { income_limit: 8710.35, subsidy_amount: 406.88 },
-            { income_limit: 9587.20, subsidy_amount: 406.87 },
-            { income_limit: Infinity, subsidy_amount: 0.00 } // No subsidy above this
-        ];
-
-        // IMSS Employee Contributions (Example values, not official)
-        // This is highly simplified. Real IMSS calculation involves multiple branches (fixed fee, percentage of excess, etc.)
-        // This example uses a fixed percentage for simplicity, which is NOT how real IMSS is calculated.
-        const imssEmployeeRate = 0.02; // Example: 2% of gross salary for IMSS (very simplified)
-        const imssCap = 25 * 108.57; // Example UMA cap (25 UMAs, UMA value example ~108.57 MXN) - Highly simplified.
-
-        // --- Core Calculation Functions ---
-
-        /**
-         * Calculates the ISR (Impuesto Sobre la Renta) based on gross income and predefined tax brackets.
-         * @param {number} grossIncome - The gross monthly income.
-         * @returns {number} The calculated ISR amount.
-         */
-        function calculateISR(grossIncome) {
-            if (grossIncome <= 0) return 0;
-
-            for (const bracket of isrBrackets) {
-                if (grossIncome > bracket.lower_limit || (grossIncome >= bracket.lower_limit && grossIncome <= bracket.upper_limit)) {
-                    const taxableBase = grossIncome - bracket.lower_limit;
-                    const isr = (taxableBase * bracket.rate) + bracket.fixed_fee;
-                    return isr;
-                }
-            }
-            return 0; // Should not happen if brackets cover all ranges
-        }
-
-        /**
-         * Calculates the Employment Subsidy (Subsidio al Empleo) based on gross income.
-         * @param {number} grossIncome - The gross monthly income.
-         * @returns {number} The employment subsidy amount.
-         */
-        function getEmploymentSubsidy(grossIncome) {
-            if (grossIncome <= 0) return 0;
-            for (const subsidy of employmentSubsidy) {
-                if (grossIncome <= subsidy.income_limit) {
-                    return subsidy.subsidy_amount;
-                }
-            }
-            return 0;
-        }
-
-        /**
-         * Calculates the simplified IMSS employee contribution.
-         * NOTE: This is a highly simplified calculation for demonstration.
-         * Real IMSS contributions are much more complex, involving UMA, fixed fees,
-         * and percentages on surplus income above certain UMAs.
-         * @param {number} grossSalary - The employee's gross monthly salary.
-         * @returns {number} The estimated IMSS contribution.
-         */
-        function calculateIMSS(grossSalary) {
-             if (grossSalary <= 0) return 0;
-            // Example: Simple percentage of salary, capped.
-            const imssContribution = Math.min(grossSalary * imssEmployeeRate, imssCap);
-            return imssContribution;
-        }
-
-        /**
-         * Calculates the net salary for an employee.
-         */
-        function calculateNetSalary() {
-            const grossSalary = parseFloat(elements.grossSalaryEmployee.value);
-            const otherDeductions = parseFloat(elements.otherDeductionsEmployee.value) || 0;
-
-            if (isNaN(grossSalary) || grossSalary < 0) {
-                showMessage(texts[currentLanguage].inputError);
-                return;
-            }
-
-            const isr = calculateISR(grossSalary);
-            const imss = calculateIMSS(grossSalary);
-            const subsidy = getEmploymentSubsidy(grossSalary);
-
-            const totalDeductions = isr + imss + otherDeductions - subsidy; // Subsidy reduces the tax burden
-            const netSalary = grossSalary - totalDeductions;
-
-            displayResults({
-                type: 'employee',
-                gross: grossSalary,
-                isr: isr,
-                imss: imss,
-                subsidy: subsidy,
-                other: otherDeductions,
-                net: netSalary,
-                ivaInfo: 0, // Not applicable for employees
-                isrWithholdingInfo: 0 // Not applicable for employees
-            });
-        }
-
-        /**
-         * Calculates the net income for a freelancer/business owner.
-         */
-        function calculateNetIncomeFreelancer() {
-            const grossIncome = parseFloat(elements.grossIncomeFreelancer.value);
-            const allowableDeductions = parseFloat(elements.allowableDeductionsFreelancer.value) || 0;
-            const ivaCollected = parseFloat(elements.ivaCollected.value) || 0;
-            const isrWithholding = parseFloat(elements.isrWithholding.value) || 0;
-
-            if (isNaN(grossIncome) || grossIncome < 0) {
-                showMessage(texts[currentLanguage].inputError);
-                return;
-            }
-
-            // Taxable income for ISR for freelancers is typically Gross Income - Allowable Deductions
-            const taxableIncome = Math.max(0, grossIncome - allowableDeductions);
-            const isr = calculateISR(taxableIncome);
-
-            // For freelancers, we subtract calculated ISR and add back any ISR withheld as it's typically a credit.
-            // However, for "net cash in hand" estimation, subtracting it here provides a realistic immediate take-home.
-            // The note clarifies it's a credit for annual declaration.
-            const netIncome = grossIncome - isr + isrWithholding - allowableDeductions;
-
-
-            displayResults({
-                type: 'freelancer',
-                gross: grossIncome,
-                isr: isr,
-                imss: 0, // Not applicable for freelancers (they pay their own social security directly if they choose)
-                subsidy: 0, // Generally not applicable for business owners, or applied differently
-                other: allowableDeductions, // Renamed 'other' to 'allowable' for freelancer context
-                net: netIncome,
-                ivaInfo: ivaCollected,
-                isrWithholdingInfo: isrWithholding
-            });
-        }
-
-        /**
-         * Displays the calculation results in the results section.
-         * @param {object} data - An object containing calculation results.
-         */
-        function displayResults(data) {
-            elements.netIncome.textContent = `MXN ${data.net.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            elements.grossInput.textContent = `MXN ${data.gross.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            elements.isrDeduction.textContent = `MXN ${data.isr.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-            // Hide/Show elements based on user type
-            if (data.type === 'employee') {
-                elements.imssRow.classList.remove('hidden');
-                elements.subsidyRow.classList.remove('hidden');
-                elements.otherDeductionsRow.classList.remove('hidden');
-                elements.ivaInfoRow.classList.add('hidden');
-                elements.isrWithholdingRow.classList.add('hidden');
-
-                elements.imssDeduction.textContent = `MXN ${data.imss.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                elements.subsidyAmount.textContent = `MXN ${data.subsidy.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                elements.otherDeductions.textContent = `MXN ${data.other.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                elements.netIncomeLabel.textContent = texts[currentLanguage].netIncomeLabel;
-                elements.grossInputLabel.textContent = texts[currentLanguage].grossInputLabel;
-                elements.otherDeductionsLabel.textContent = texts[currentLanguage].otherDeductionsLabel;
-
-            } else { // Freelancer
-                elements.imssRow.classList.add('hidden');
-                elements.subsidyRow.classList.add('hidden');
-                elements.otherDeductionsRow.classList.remove('hidden'); // Show allowable deductions
-                elements.ivaInfoRow.classList.remove('hidden');
-                elements.isrWithholdingRow.classList.remove('hidden');
-
-                elements.otherDeductions.textContent = `MXN ${data.other.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                elements.ivaInfoAmount.textContent = `MXN ${data.ivaInfo.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                elements.isrWithholdingInfoAmount.textContent = `MXN ${data.isrWithholdingInfo.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                 elements.netIncomeLabel.textContent = texts[currentLanguage].netIncomeLabel.replace('Salario', 'Ingreso'); // Adjust label
-                elements.grossInputLabel.textContent = texts[currentLanguage].grossInputLabel.replace('Salario', 'Ingreso');
-                elements.otherDeductionsLabel.textContent = texts[currentLanguage].labelAllowableDeductionsFreelancer; // Use specific label
-            }
-
-            elements.resultsSection.classList.remove('hidden');
-            elements.savedCalculationsSection.classList.remove('hidden'); // Show saved calculations section
-            updateTranslation(); // Ensure results section titles are translated
-        }
-
-        // --- Language Management ---
-
-        /**
-         * Sets the application language.
-         * @param {string} lang - 'es' for Spanish, 'en' for English.
-         */
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.documentElement.lang = lang; // Set HTML lang attribute for SEO
-            updateTranslation();
-            // Update toggle switch based on language
-            elements.languageToggle.checked = (lang === 'en');
-            // Update active state of language text
-            elements.langEs.classList.toggle('text-gray-700', lang === 'es');
-            elements.langEs.classList.toggle('text-gray-400', lang === 'en');
-            elements.langEn.classList.toggle('text-gray-700', lang === 'en');
-            elements.langEn.classList.toggle('text-gray-400', lang === 'es');
-        }
-
-        /**
-         * Toggles the language between Spanish and English.
-         */
-        function toggleLanguage() {
-            setLanguage(elements.languageToggle.checked ? 'en' : 'es');
-        }
-
-        /**
-         * Updates all translatable text elements on the page based on the current language.
-         */
-        function updateTranslation() {
-            const currentTexts = texts[currentLanguage];
-
-            elements.tagline.textContent = currentTexts.tagline;
-            elements.btnEmployeeText.textContent = currentTexts.btnEmployeeText;
-            elements.btnFreelancerText.textContent = currentTexts.btnFreelancerText;
-            elements.employeeTitle.textContent = currentTexts.employeeTitle;
-            elements.freelancerTitle.textContent = currentTexts.freelancerTitle;
-            elements.labelGrossSalaryEmployee.textContent = currentTexts.labelGrossSalaryEmployee;
-            elements.labelOtherDeductionsEmployee.textContent = currentTexts.labelOtherDeductionsEmployee;
-            elements.calculateBtnEmployee.textContent = currentTexts.calculateBtnEmployee;
-            elements.labelGrossIncomeFreelancer.textContent = currentTexts.labelGrossIncomeFreelancer;
-            elements.labelAllowableDeductionsFreelancer.textContent = currentTexts.labelAllowableDeductionsFreelancer;
-            elements.labelIvaCollected.textContent = currentTexts.labelIvaCollected;
-            elements.ivaNote.textContent = currentTexts.ivaNote;
-            elements.labelIsrWithholding.textContent = currentTexts.labelIsrWithholding;
-            elements.withholdingNote.textContent = currentTexts.withholdingNote;
-            elements.calculateBtnFreelancer.textContent = currentTexts.calculateBtnFreelancer;
-            elements.resultsTitle.textContent = currentTexts.resultsTitle;
-            elements.netIncomeLabel.textContent = currentTexts.netIncomeLabel;
-            elements.grossInputLabel.textContent = currentTexts.grossInputLabel;
-            elements.isrDeductionLabel.textContent = currentTexts.isrDeductionLabel;
-            elements.imssDeductionLabel.textContent = currentTexts.imssDeductionLabel;
-            elements.subsidyLabel.textContent = currentTexts.subsidyLabel;
-            elements.otherDeductionsLabel.textContent = currentTexts.otherDeductionsLabel;
-            elements.ivaInfoLabel.textContent = currentTexts.ivaInfoLabel;
-            elements.isrWithholdingInfoLabel.textContent = currentTexts.isrWithholdingInfoLabel;
-            elements.disclaimer.textContent = currentTexts.disclaimer;
-            elements.saveCalcText.textContent = currentTexts.saveCalcText;
-            elements.savedCalcTitle.textContent = currentTexts.savedCalcTitle;
-            elements.clearSavedText.textContent = currentTexts.clearSavedText;
-            elements.rightsText.textContent = currentTexts.rightsText;
-            elements.contactText.textContent = currentTexts.contactText;
-
-            // Re-render saved calculations to update their text
-            loadSavedCalculations();
-        }
-
-        // --- Tab Switching ---
-
-        /**
-         * Switches between employee and freelancer calculation tabs.
-         * @param {string} type - 'employee' or 'freelancer'.
-         */
-        function switchTab(type) {
-            currentUserType = type;
-
-            if (type === 'employee') {
-                elements.employeeSection.classList.remove('hidden');
-                elements.freelancerSection.classList.add('hidden');
-                elements.tabEmployee.classList.add('active');
-                elements.tabFreelancer.classList.remove('active');
-                // Clear freelancer inputs when switching
-                elements.grossIncomeFreelancer.value = '';
-                elements.allowableDeductionsFreelancer.value = '0';
-                elements.ivaCollected.value = '0';
-                elements.isrWithholding.value = '0';
-            } else {
-                elements.employeeSection.classList.add('hidden');
-                elements.freelancerSection.classList.remove('hidden');
-                elements.tabEmployee.classList.remove('active');
-                elements.tabFreelancer.classList.add('active');
-                // Clear employee inputs when switching
-                elements.grossSalaryEmployee.value = '';
-                elements.otherDeductionsEmployee.value = '0';
-            }
-            // Hide results section when switching tabs, will reappear on calculation
-            elements.resultsSection.classList.add('hidden');
-        }
-
-        // --- Local Storage Management ---
-
-        /**
-         * Saves the current calculation to local storage.
-         */
-        function saveCalculation() {
-            let calculationData;
-            if (currentUserType === 'employee') {
-                const grossSalary = parseFloat(elements.grossSalaryEmployee.value);
-                const otherDeductions = parseFloat(elements.otherDeductionsEmployee.value) || 0;
-                if (isNaN(grossSalary) || grossSalary < 0) {
-                    showMessage(texts[currentLanguage].inputError);
-                    return;
-                }
-                const isr = calculateISR(grossSalary);
-                const imss = calculateIMSS(grossSalary);
-                const subsidy = getEmploymentSubsidy(grossSalary);
-                const net = grossSalary - (isr + imss + otherDeductions - subsidy);
-                calculationData = {
-                    type: currentUserType,
-                    gross: grossSalary,
-                    otherDeductions: otherDeductions,
-                    isr: isr,
-                    imss: imss,
-                    subsidy: subsidy,
-                    net: net,
-                    timestamp: new Date().toISOString()
-                };
-            } else { // Freelancer
-                const grossIncome = parseFloat(elements.grossIncomeFreelancer.value);
-                const allowableDeductions = parseFloat(elements.allowableDeductionsFreelancer.value) || 0;
-                const ivaCollected = parseFloat(elements.ivaCollected.value) || 0;
-                const isrWithholding = parseFloat(elements.isrWithholding.value) || 0;
-                if (isNaN(grossIncome) || grossIncome < 0) {
-                     showMessage(texts[currentLanguage].inputError);
-                    return;
-                }
-                const taxableIncome = Math.max(0, grossIncome - allowableDeductions);
-                const isr = calculateISR(taxableIncome);
-                const net = grossIncome - isr + isrWithholding - allowableDeductions;
-                calculationData = {
-                    type: currentUserType,
-                    gross: grossIncome,
-                    allowableDeductions: allowableDeductions,
-                    ivaCollected: ivaCollected,
-                    isrWithholding: isrWithholding,
-                    isr: isr,
-                    net: net,
-                    timestamp: new Date().toISOString()
-                };
-            }
-
-            let savedCalculations = JSON.parse(localStorage.getItem('mxNetPayCalculations')) || [];
-            savedCalculations.push(calculationData);
-            localStorage.setItem('mxNetPayCalculations', JSON.stringify(savedCalculations));
-            showMessage(texts[currentLanguage].calculationSaved);
-            loadSavedCalculations(); // Reload list after saving
-        }
-
-        /**
-         * Loads and displays saved calculations from local storage.
-         */
-        function loadSavedCalculations() {
-            const savedCalculations = JSON.parse(localStorage.getItem('mxNetPayCalculations')) || [];
-            elements.savedCalculationsList.innerHTML = ''; // Clear existing list
-
-            if (savedCalculations.length === 0) {
-                elements.savedCalculationsList.innerHTML = `<p class="text-gray-500 text-center">${texts[currentLanguage].noSavedCalculations}</p>`;
-                return;
-            }
-
-            savedCalculations.forEach((calc, index) => {
-                const date = new Date(calc.timestamp).toLocaleString(currentLanguage === 'es' ? 'es-MX' : 'en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                });
-
-                let detailsHtml = '';
-                if (calc.type === 'employee') {
-                    detailsHtml = `
-                        <p class="text-xs text-gray-500">${texts[currentLanguage].grossInputLabel}: MXN ${calc.gross.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p class="text-xs text-gray-500">${texts[currentLanguage].isrDeductionLabel}: MXN ${calc.isr.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p class="text-xs text-gray-500">${texts[currentLanguage].imssDeductionLabel}: MXN ${calc.imss.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        ${calc.subsidy > 0 ? `<p class="text-xs text-gray-500">${texts[currentLanguage].subsidyLabel}: MXN ${calc.subsidy.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>` : ''}
-                        ${calc.otherDeductions > 0 ? `<p class="text-xs text-gray-500">${texts[currentLanguage].otherDeductionsLabel}: MXN ${calc.otherDeductions.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>` : ''}
+          let detailsHtml = "";
+          if (calc.type === "employee") {
+            detailsHtml = `
+                        <p class="text-xs text-gray-500">${
+                          texts[currentLanguage].grossInputLabel
+                        }: MXN ${calc.gross.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</p>
+                        <p class="text-xs text-gray-500">${
+                          texts[currentLanguage].isrDeductionLabel
+                        }: MXN ${calc.isr.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</p>
+                        <p class="text-xs text-gray-500">${
+                          texts[currentLanguage].imssDeductionLabel
+                        }: MXN ${calc.imss.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</p>
+                        ${
+                          calc.subsidy > 0
+                            ? `<p class="text-xs text-gray-500">${
+                                texts[currentLanguage].subsidyLabel
+                              }: MXN ${calc.subsidy.toLocaleString("es-MX", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}</p>`
+                            : ""
+                        }
+                        ${
+                          calc.otherDeductions > 0
+                            ? `<p class="text-xs text-gray-500">${
+                                texts[currentLanguage].otherDeductionsLabel
+                              }: MXN ${calc.otherDeductions.toLocaleString(
+                                "es-MX",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}</p>`
+                            : ""
+                        }
                     `;
-                } else { // Freelancer
-                    detailsHtml = `
-                        <p class="text-xs text-gray-500">${texts[currentLanguage].grossInputLabel.replace('Salario', 'Ingreso')}: MXN ${calc.gross.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        <p class="text-xs text-gray-500">${texts[currentLanguage].isrDeductionLabel}: MXN ${calc.isr.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                        ${calc.allowableDeductions > 0 ? `<p class="text-xs text-gray-500">${texts[currentLanguage].labelAllowableDeductionsFreelancer}: MXN ${calc.allowableDeductions.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>` : ''}
-                        ${calc.ivaCollected > 0 ? `<p class="text-xs text-gray-500">${texts[currentLanguage].ivaInfoLabel}: MXN ${calc.ivaCollected.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>` : ''}
-                        ${calc.isrWithholding > 0 ? `<p class="text-xs text-gray-500">${texts[currentLanguage].isrWithholdingInfoLabel}: MXN ${calc.isrWithholding.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>` : ''}
+          } else {
+            // Freelancer
+            detailsHtml = `
+                        <p class="text-xs text-gray-500">${texts[
+                          currentLanguage
+                        ].grossInputLabel.replace(
+                          "Salario",
+                          "Ingreso"
+                        )}: MXN ${calc.gross.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</p>
+                        <p class="text-xs text-gray-500">${
+                          texts[currentLanguage].isrDeductionLabel
+                        }: MXN ${calc.isr.toLocaleString("es-MX", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</p>
+                        ${
+                          calc.allowableDeductions > 0
+                            ? `<p class="text-xs text-gray-500">${
+                                texts[currentLanguage]
+                                  .labelAllowableDeductionsFreelancer
+                              }: MXN ${calc.allowableDeductions.toLocaleString(
+                                "es-MX",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}</p>`
+                            : ""
+                        }
+                        ${
+                          calc.ivaCollected > 0
+                            ? `<p class="text-xs text-gray-500">${
+                                texts[currentLanguage].ivaInfoLabel
+                              }: MXN ${calc.ivaCollected.toLocaleString(
+                                "es-MX",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}</p>`
+                            : ""
+                        }
+                        ${
+                          calc.isrWithholding > 0
+                            ? `<p class="text-xs text-gray-500">${
+                                texts[currentLanguage].isrWithholdingInfoLabel
+                              }: MXN ${calc.isrWithholding.toLocaleString(
+                                "es-MX",
+                                {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }
+                              )}</p>`
+                            : ""
+                        }
                     `;
-                }
+          }
 
-                const listItem = document.createElement('div');
-                listItem.className = 'card p-4 flex justify-between items-center bg-white shadow-md rounded-xl';
-                listItem.innerHTML = `
+          const listItem = document.createElement("div");
+          listItem.className =
+            "card p-4 flex justify-between items-center bg-white shadow-md rounded-xl";
+          listItem.innerHTML = `
                     <div>
-                        <p class="text-base font-semibold text-gray-800">${calc.type === 'employee' ? texts[currentLanguage].btnEmployeeText : texts[currentLanguage].btnFreelancerText}: <span class="text-emerald-600">MXN ${calc.net.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                        <p class="text-base font-semibold text-gray-800">${
+                          calc.type === "employee"
+                            ? texts[currentLanguage].btnEmployeeText
+                            : texts[currentLanguage].btnFreelancerText
+                        }: <span class="text-emerald-600">MXN ${calc.net.toLocaleString(
+            "es-MX",
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          )}</span></p>
                         <p class="text-xs text-gray-400">${date}</p>
                         <div class="mt-2 text-sm">
                             ${detailsHtml}
@@ -850,112 +1296,142 @@
                         </svg>
                     </button>
                 `;
-                elements.savedCalculationsList.appendChild(listItem);
-            });
+          elements.savedCalculationsList.appendChild(listItem);
+        });
+      }
+
+      /**
+       * Deletes a saved calculation from local storage by its index.
+       * @param {number} index - The index of the calculation to delete.
+       */
+      function deleteCalculation(index) {
+        let savedCalculations =
+          JSON.parse(localStorage.getItem("mxNetPayCalculations")) || [];
+        if (index > -1 && index < savedCalculations.length) {
+          savedCalculations.splice(index, 1);
+          localStorage.setItem(
+            "mxNetPayCalculations",
+            JSON.stringify(savedCalculations)
+          );
+          loadSavedCalculations(); // Reload the list
+        }
+      }
+
+      /**
+       * Clears all saved calculations from local storage.
+       */
+      function clearSavedCalculations() {
+        if (window.confirm(texts[currentLanguage].clearConfirm)) {
+          localStorage.removeItem("mxNetPayCalculations");
+          loadSavedCalculations(); // Reload the list (will show "No calculations saved")
+          elements.savedCalculationsSection.classList.add("hidden"); // Hide the section if empty
+        }
+      }
+
+      // --- Custom Message Box (replacing alert/confirm) ---
+      function showMessageBox(message) {
+        elements.messageText.textContent = message;
+        elements.messageBox.style.display = "block";
+      }
+
+      function hideMessageBox() {
+        elements.messageBox.style.display = "none";
+      }
+
+      // --- Initial Setup on Load ---
+      window.onload = function () {
+        // Set initial language and load translations
+        setLanguage("es");
+        // Load previously selected tab or default to employee
+        const savedTab = localStorage.getItem("mxNetPayCurrentTab");
+        if (savedTab) {
+          switchTab(savedTab);
+        } else {
+          switchTab("employee");
         }
 
-        /**
-         * Deletes a saved calculation from local storage by its index.
-         * @param {number} index - The index of the calculation to delete.
-         */
-        function deleteCalculation(index) {
-            let savedCalculations = JSON.parse(localStorage.getItem('mxNetPayCalculations')) || [];
-            if (index > -1 && index < savedCalculations.length) {
-                savedCalculations.splice(index, 1);
-                localStorage.setItem('mxNetPayCalculations', JSON.stringify(savedCalculations));
-                loadSavedCalculations(); // Reload the list
-            }
+        // Load last input values for persistence
+        const lastEmployeeInput = localStorage.getItem("mxNetPayEmployeeInput");
+        if (lastEmployeeInput) {
+          const data = JSON.parse(lastEmployeeInput);
+          elements.grossSalaryEmployee.value = data.grossSalary || "";
+          elements.otherDeductionsEmployee.value = data.otherDeductions || "0";
+        }
+        const lastFreelancerInput = localStorage.getItem(
+          "mxNetPayFreelancerInput"
+        );
+        if (lastFreelancerInput) {
+          const data = JSON.parse(lastFreelancerInput);
+          elements.grossIncomeFreelancer.value = data.grossIncome || "";
+          elements.allowableDeductionsFreelancer.value =
+            data.allowableDeductions || "0";
+          elements.ivaCollected.value = data.ivaCollected || "0";
+          elements.isrWithholding.value = data.isrWithholding || "0";
         }
 
-        /**
-         * Clears all saved calculations from local storage.
-         */
-        function clearSavedCalculations() {
-            if (window.confirm(texts[currentLanguage].clearConfirm)) {
-                localStorage.removeItem('mxNetPayCalculations');
-                loadSavedCalculations(); // Reload the list (will show "No calculations saved")
-                elements.savedCalculationsSection.classList.add('hidden'); // Hide the section if empty
-            }
+        // Add event listeners to save inputs on change
+        elements.grossSalaryEmployee.addEventListener(
+          "input",
+          saveCurrentInputs
+        );
+        elements.otherDeductionsEmployee.addEventListener(
+          "input",
+          saveCurrentInputs
+        );
+        elements.grossIncomeFreelancer.addEventListener(
+          "input",
+          saveCurrentInputs
+        );
+        elements.allowableDeductionsFreelancer.addEventListener(
+          "input",
+          saveCurrentInputs
+        );
+        elements.ivaCollected.addEventListener("input", saveCurrentInputs);
+        elements.isrWithholding.addEventListener("input", saveCurrentInputs);
+
+        // Add event listener for tab buttons to save current tab
+        elements.tabEmployee.addEventListener("click", () =>
+          localStorage.setItem("mxNetPayCurrentTab", "employee")
+        );
+        elements.tabFreelancer.addEventListener("click", () =>
+          localStorage.setItem("mxNetPayCurrentTab", "freelancer")
+        );
+
+        // Load and display saved calculations
+        loadSavedCalculations();
+        if (
+          JSON.parse(localStorage.getItem("mxNetPayCalculations"))?.length > 0
+        ) {
+          elements.savedCalculationsSection.classList.remove("hidden");
         }
+      };
 
-        // --- Custom Message Box (replacing alert/confirm) ---
-        function showMessageBox(message) {
-            elements.messageText.textContent = message;
-            elements.messageBox.style.display = 'block';
+      /**
+       * Saves current input values to local storage.
+       */
+      function saveCurrentInputs() {
+        if (currentUserType === "employee") {
+          const employeeInput = {
+            grossSalary: elements.grossSalaryEmployee.value,
+            otherDeductions: elements.otherDeductionsEmployee.value,
+          };
+          localStorage.setItem(
+            "mxNetPayEmployeeInput",
+            JSON.stringify(employeeInput)
+          );
+        } else {
+          const freelancerInput = {
+            grossIncome: elements.grossIncomeFreelancer.value,
+            allowableDeductions: elements.allowableDeductionsFreelancer.value,
+            ivaCollected: elements.ivaCollected.value,
+            isrWithholding: elements.isrWithholding.value,
+          };
+          localStorage.setItem(
+            "mxNetPayFreelancerInput",
+            JSON.stringify(freelancerInput)
+          );
         }
-
-        function hideMessageBox() {
-            elements.messageBox.style.display = 'none';
-        }
-
-        // --- Initial Setup on Load ---
-        window.onload = function() {
-            // Set initial language and load translations
-            setLanguage('es');
-            // Load previously selected tab or default to employee
-            const savedTab = localStorage.getItem('mxNetPayCurrentTab');
-            if (savedTab) {
-                switchTab(savedTab);
-            } else {
-                switchTab('employee');
-            }
-
-            // Load last input values for persistence
-            const lastEmployeeInput = localStorage.getItem('mxNetPayEmployeeInput');
-            if (lastEmployeeInput) {
-                const data = JSON.parse(lastEmployeeInput);
-                elements.grossSalaryEmployee.value = data.grossSalary || '';
-                elements.otherDeductionsEmployee.value = data.otherDeductions || '0';
-            }
-            const lastFreelancerInput = localStorage.getItem('mxNetPayFreelancerInput');
-            if (lastFreelancerInput) {
-                const data = JSON.parse(lastFreelancerInput);
-                elements.grossIncomeFreelancer.value = data.grossIncome || '';
-                elements.allowableDeductionsFreelancer.value = data.allowableDeductions || '0';
-                elements.ivaCollected.value = data.ivaCollected || '0';
-                elements.isrWithholding.value = data.isrWithholding || '0';
-            }
-
-            // Add event listeners to save inputs on change
-            elements.grossSalaryEmployee.addEventListener('input', saveCurrentInputs);
-            elements.otherDeductionsEmployee.addEventListener('input', saveCurrentInputs);
-            elements.grossIncomeFreelancer.addEventListener('input', saveCurrentInputs);
-            elements.allowableDeductionsFreelancer.addEventListener('input', saveCurrentInputs);
-            elements.ivaCollected.addEventListener('input', saveCurrentInputs);
-            elements.isrWithholding.addEventListener('input', saveCurrentInputs);
-
-            // Add event listener for tab buttons to save current tab
-            elements.tabEmployee.addEventListener('click', () => localStorage.setItem('mxNetPayCurrentTab', 'employee'));
-            elements.tabFreelancer.addEventListener('click', () => localStorage.setItem('mxNetPayCurrentTab', 'freelancer'));
-
-
-            // Load and display saved calculations
-            loadSavedCalculations();
-            if (JSON.parse(localStorage.getItem('mxNetPayCalculations'))?.length > 0) {
-                 elements.savedCalculationsSection.classList.remove('hidden');
-            }
-        };
-
-        /**
-         * Saves current input values to local storage.
-         */
-        function saveCurrentInputs() {
-            if (currentUserType === 'employee') {
-                const employeeInput = {
-                    grossSalary: elements.grossSalaryEmployee.value,
-                    otherDeductions: elements.otherDeductionsEmployee.value
-                };
-                localStorage.setItem('mxNetPayEmployeeInput', JSON.stringify(employeeInput));
-            } else {
-                const freelancerInput = {
-                    grossIncome: elements.grossIncomeFreelancer.value,
-                    allowableDeductions: elements.allowableDeductionsFreelancer.value,
-                    ivaCollected: elements.ivaCollected.value,
-                    isrWithholding: elements.isrWithholding.value
-                };
-                localStorage.setItem('mxNetPayFreelancerInput', JSON.stringify(freelancerInput));
-            }
-        }
+      }
     </script>
-</body>
+  </body>
 </html>

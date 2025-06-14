@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bharatnetpay.netlify.app/sitemap.xml
+Sitemap: https://mxnetpay.netlify.app/sitemap.xml
